@@ -17,6 +17,7 @@ public class Rin {
     private static final List<String> DEFAULT_IMAGE_EXTS = Arrays.asList("png", "jpg", "jpeg", "webp", "gif", "bmp");
 
     public static void main(String[] args) {
+        // 引数がなかったときに、つかいかたを表示
         if (args.length == 0) {
             printUsage();
             return;
@@ -27,13 +28,13 @@ public class Rin {
         List<String> targetExtensions = new ArrayList<>();
         boolean allSpecified = false;
 
+        // 引数チェック
         for (String arg : args) {
             if (arg.equalsIgnoreCase("all")) {
                 allSpecified = true;
                 continue;
             }
 
-            // Check if it's a number (length)
             if (arg.matches("\\d+")) {
                 int len = Integer.parseInt(arg);
                 if (len >= 2) {
@@ -42,18 +43,16 @@ public class Rin {
                 }
             }
 
-            // Check if it's a path
             File file = new File(arg);
             if (file.exists()) {
                 targetPathStr = arg;
                 continue;
             }
 
-            // Otherwise treat as extension
             targetExtensions.add(arg.toLowerCase());
         }
 
-        // If no extensions specified, use defaults
+        // 拡張子の指定がないときは、デフォルトの拡張子をつかう
         if (targetExtensions.isEmpty()) {
             targetExtensions.addAll(DEFAULT_IMAGE_EXTS);
         }
@@ -71,8 +70,6 @@ public class Rin {
         }
 
         if (target.isFile()) {
-            // If it's a single file, rename it regardless of extension?
-            // User said: "そのパスのディレクトリの中orそのファイルに対して"
             renameFile(target, length);
         } else if (target.isDirectory()) {
             File[] files = target.listFiles();
@@ -137,10 +134,11 @@ public class Rin {
     }
 
     private static void printUsage() {
-        System.out.println("Usage: rin [all] [path] [length] [extension...]");
-        System.out.println("  all: Rename image files in current directory (12 chars)");
-        System.out.println("  path: Target directory or file");
-        System.out.println("  length: Length of random name (integer >= 2)");
-        System.out.println("  extension: Target file extensions (e.g. png, txt)");
+        System.out.println("つかいかた");
+        System.out.println(" rin all: 現在のディレクトリ内の画像ファイルをランダムな名前に変更します。12文字のランダムな名前に変更します。");
+        System.out.println("引数: rin [path] [length] [extension...]");
+        System.out.println(" path: 対象のディレクトリまたはファイル");
+        System.out.println(" length: ランダムな名前の文字数 (整数 >= 2)");
+        System.out.println(" extension: 対象のファイルの拡張子");
     }
 }
